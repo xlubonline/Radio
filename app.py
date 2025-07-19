@@ -1,5 +1,6 @@
 import logging
 from flask import Flask, Response, stream_with_context
+from flask_cors import CORS
 from mutagen.mp3 import MP3
 import os
 import time
@@ -8,6 +9,7 @@ import time
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 AUDIO_FOLDER = 'static/audio'
 CHUNK_SIZE = 4096
@@ -70,9 +72,14 @@ def generate_stream():
 
 @app.route('/stream')
 def stream_audio():
+    headers = {
+        'Content-Type': 'audio/mpeg',
+        'Cache-Control': 'no-cache',
+        'Accept-Ranges': 'bytes'
+    }
     return Response(
         stream_with_context(generate_stream()),
-        mimetype='audio/mpeg'
+        headers=headers
     )
 
 if __name__ == '__main__':
