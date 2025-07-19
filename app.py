@@ -70,7 +70,7 @@ def generate_stream():
                 if new_track['file'] != track['file']:
                     break
 
-@app.route('/stream')
+@app.route('/stream/mal')
 def stream_audio():
     headers = {
         'Content-Type': 'audio/mpeg',
